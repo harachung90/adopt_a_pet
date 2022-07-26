@@ -3,7 +3,6 @@ from helper import pets
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def index():
   return '''
@@ -16,13 +15,27 @@ def index():
   </ul>
   '''
 
-
 @app.route('/animals/<pet_type>')
 def animals(pet_type):
   html = f"<h1>Lits of {pet_type}</h1><ul>"
 
-  for pet in pets:
-    html += "<li>pet[pet_type]</li>"
+  for i, item in enumerate(pets[pet_type]):
+    html += f'<li><a href="/animals/{pet_type}/{i}">' + item["name"] + "</a></li>"
   html += "</ul>"
 
   return html
+
+
+@app.route('/animals/<pet_type>/<int:pet_id>')
+def pet(pet_type, pet_id):
+  pet = pets[pet_type][pet_id]
+
+  return f'''
+  <h1>{pet["name"]}</h1>
+  <img src="{pet["url"]}" />
+  <p>{pet["description"]}</p>
+  <ul>
+    <li>Age: {pet["age"]}</li>
+    <li>Breed: {pet["breed"]}</li>
+  </ul>
+  '''
